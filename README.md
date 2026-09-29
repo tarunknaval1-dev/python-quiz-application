@@ -5,6 +5,8 @@ A simple command-line quiz application built using Python.
 
 ## Features
 
+- Multiple quiz categories: Python, Science, and General Knowledge
+- Replay the quiz with another category
 - Multiple-choice questions
 - Input validation for answers
 - Score calculation
