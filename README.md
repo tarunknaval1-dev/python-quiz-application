@@ -11,6 +11,8 @@ A simple command-line quiz application built using Python.
 - Input validation for answers
 - Score calculation
 - Percentage result at the end of the quiz
+- Shows answer review after completing the quiz
+- Provides performance feedback based on the final percentage
 
 ## Requirements
 
