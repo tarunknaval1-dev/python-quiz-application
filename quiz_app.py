@@ -74,15 +74,41 @@ def choose_category():
             print("Please enter a number.")
 
 
+def get_performance_message(percentage):
+    if percentage == 100:
+        return "Excellent! Perfect score!"
+    elif percentage >= 70:
+        return "Great job! You have strong knowledge."
+    elif percentage >= 50:
+        return "Good effort! Keep practicing."
+    else:
+        return "Keep learning and try again."
+
+
+def show_review(answers):
+    print("\n--- Answer Review ---")
+
+    for number, item in enumerate(answers, start=1):
+        print(f"\nQuestion {number}: {item['question']}")
+        print(f"Your answer: {item['user_answer']}")
+        print(f"Correct answer: {item['correct_answer']}")
+
+        if item["is_correct"]:
+            print("Result: Correct")
+        else:
+            print("Result: Wrong")
+
+
 def start_quiz(category):
     score = 0
     selected_questions = questions[category]
+    answers = []
 
     print(f"\n--- {category} Quiz ---")
     print("Choose the correct option: A, B, C, or D.\n")
 
     for number, quiz in enumerate(selected_questions, start=1):
-        print(f"Question {number}: {quiz['question']}")
+        print(f"Question {number}/{len(selected_questions)}: {quiz['question']}")
 
         for option in quiz["options"]:
             print(option)
@@ -93,7 +119,16 @@ def start_quiz(category):
             print("Invalid choice. Please enter A, B, C, or D.")
             user_answer = input("Your answer: ").strip().upper()
 
-        if user_answer == quiz["answer"]:
+        is_correct = user_answer == quiz["answer"]
+
+        answers.append({
+            "question": quiz["question"],
+            "user_answer": user_answer,
+            "correct_answer": quiz["answer"],
+            "is_correct": is_correct
+        })
+
+        if is_correct:
             print("Correct!\n")
             score += 1
         else:
@@ -105,6 +140,9 @@ def start_quiz(category):
     print(f"Category: {category}")
     print(f"Your score: {score}/{len(selected_questions)}")
     print(f"Percentage: {percentage:.0f}%")
+    print(get_performance_message(percentage))
+
+    show_review(answers)
 
 
 def main():
