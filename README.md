@@ -13,6 +13,9 @@ A simple command-line quiz application built using Python.
 - Percentage result at the end of the quiz
 - Shows answer review after completing the quiz
 - Provides performance feedback based on the final percentage
+- Saves quiz scores locally using JSON
+- Stores player name, category, score, and date
+- Shows a top-five high-score leaderboard
 
 ## Requirements
 
