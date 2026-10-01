@@ -1,3 +1,9 @@
+import json
+from datetime import datetime
+from pathlib import Path
+
+SCORES_FILE = Path("scores.json")
+
 questions = {
     "Python": [
         {
@@ -53,6 +59,59 @@ questions = {
 }
 
 
+def load_scores():
+    if SCORES_FILE.exists():
+        with open(SCORES_FILE, "r") as file:
+            return json.load(file)
+
+    return []
+
+
+def save_scores(scores):
+    with open(SCORES_FILE, "w") as file:
+        json.dump(scores, file, indent=4)
+
+
+def save_quiz_result(name, category, score, total_questions):
+    scores = load_scores()
+    percentage = (score / total_questions) * 100
+
+    result = {
+        "name": name,
+        "category": category,
+        "score": score,
+        "total_questions": total_questions,
+        "percentage": percentage,
+        "date": datetime.now().strftime("%Y-%m-%d %H:%M")
+    }
+
+    scores.append(result)
+    save_scores(scores)
+
+
+def show_high_scores():
+    scores = load_scores()
+
+    if not scores:
+        print("\nNo quiz scores saved yet.\n")
+        return
+
+    scores.sort(key=lambda item: item["percentage"], reverse=True)
+
+    print("\n--- High Score Leaderboard ---")
+
+    for number, score in enumerate(scores[:5], start=1):
+        print(
+            f"{number}. {score['name']} | "
+            f"{score['category']} | "
+            f"{score['score']}/{score['total_questions']} | "
+            f"{score['percentage']:.0f}% | "
+            f"{score['date']}"
+        )
+
+    print()
+
+
 def choose_category():
     category_names = list(questions.keys())
 
@@ -99,7 +158,8 @@ def show_review(answers):
             print("Result: Wrong")
 
 
-def start_quiz(category):
+def start_quiz(name):
+    category = choose_category()
     score = 0
     selected_questions = questions[category]
     answers = []
@@ -142,21 +202,37 @@ def start_quiz(category):
     print(f"Percentage: {percentage:.0f}%")
     print(get_performance_message(percentage))
 
+    save_quiz_result(name, category, score, len(selected_questions))
+    print("Your result has been saved to the leaderboard.")
+
     show_review(answers)
 
 
 def main():
     print("Welcome to the Python Quiz Application!")
 
+    name = input("Enter your name: ").strip()
+
+    if not name:
+        name = "Player"
+
     while True:
-        category = choose_category()
-        start_quiz(category)
+        print("\n--- Main Menu ---")
+        print("1. Start Quiz")
+        print("2. View High Scores")
+        print("3. Exit")
 
-        play_again = input("\nDo you want to play again? (yes/no): ").strip().lower()
+        choice = input("Choose an option: ").strip()
 
-        if play_again != "yes":
+        if choice == "1":
+            start_quiz(name)
+        elif choice == "2":
+            show_high_scores()
+        elif choice == "3":
             print("Thank you for playing!")
             break
+        else:
+            print("Invalid choice. Try again.")
 
 
 if __name__ == "__main__":
