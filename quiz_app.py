@@ -1,4 +1,5 @@
 import json
+import random
 from datetime import datetime
 from pathlib import Path
 
@@ -72,13 +73,14 @@ def save_scores(scores):
         json.dump(scores, file, indent=4)
 
 
-def save_quiz_result(name, category, score, total_questions):
+def save_quiz_result(name, category, difficulty, score, total_questions):
     scores = load_scores()
     percentage = (score / total_questions) * 100
 
     result = {
         "name": name,
         "category": category,
+        "difficulty": difficulty,
         "score": score,
         "total_questions": total_questions,
         "percentage": percentage,
@@ -104,6 +106,7 @@ def show_high_scores():
         print(
             f"{number}. {score['name']} | "
             f"{score['category']} | "
+            f"{score['difficulty']} | "
             f"{score['score']}/{score['total_questions']} | "
             f"{score['percentage']:.0f}% | "
             f"{score['date']}"
@@ -133,6 +136,27 @@ def choose_category():
             print("Please enter a number.")
 
 
+def choose_difficulty():
+    difficulties = {
+        "1": {"name": "Easy", "question_count": 1},
+        "2": {"name": "Medium", "question_count": 2},
+        "3": {"name": "Hard", "question_count": 3}
+    }
+
+    print("\n--- Difficulty Level ---")
+    print("1. Easy - 1 question")
+    print("2. Medium - 2 questions")
+    print("3. Hard - 3 questions")
+
+    while True:
+        choice = input("Choose difficulty: ").strip()
+
+        if choice in difficulties:
+            return difficulties[choice]
+
+        print("Please choose 1, 2, or 3.")
+
+
 def get_performance_message(percentage):
     if percentage == 100:
         return "Excellent! Perfect score!"
@@ -160,11 +184,17 @@ def show_review(answers):
 
 def start_quiz(name):
     category = choose_category()
+    difficulty = choose_difficulty()
     score = 0
-    selected_questions = questions[category]
     answers = []
 
-    print(f"\n--- {category} Quiz ---")
+    selected_questions = random.sample(
+        questions[category],
+        difficulty["question_count"]
+    )
+
+    print(f"\n--- {category} Quiz ({difficulty['name']}) ---")
+    print("Questions are selected randomly.")
     print("Choose the correct option: A, B, C, or D.\n")
 
     for number, quiz in enumerate(selected_questions, start=1):
@@ -198,13 +228,20 @@ def start_quiz(name):
 
     print("--- Quiz Completed ---")
     print(f"Category: {category}")
+    print(f"Difficulty: {difficulty['name']}")
     print(f"Your score: {score}/{len(selected_questions)}")
     print(f"Percentage: {percentage:.0f}%")
     print(get_performance_message(percentage))
 
-    save_quiz_result(name, category, score, len(selected_questions))
-    print("Your result has been saved to the leaderboard.")
+    save_quiz_result(
+        name,
+        category,
+        difficulty["name"],
+        score,
+        len(selected_questions)
+    )
 
+    print("Your result has been saved to the leaderboard.")
     show_review(answers)
 
 
