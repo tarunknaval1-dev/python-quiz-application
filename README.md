@@ -1,25 +1,41 @@
-# python-quiz-application
 # Python Quiz Application
 
-A simple command-line quiz application built using Python.
+A command-line quiz application built with Python.
+
+Users can choose a quiz category and difficulty level, answer randomly selected multiple-choice questions, review their answers, and save scores to a local leaderboard.
 
 ## Features
 
-- Multiple quiz categories: Python, Science, and General Knowledge
-- Replay the quiz with another category
-- Multiple-choice questions
+- Multiple-choice quiz questions
+- Categories:
+  - Python
+  - Science
+  - General Knowledge
+- Difficulty levels:
+  - Easy: 1 random question
+  - Medium: 2 random questions
+  - Hard: 3 random questions
 - Input validation for answers
-- Score calculation
-- Percentage result at the end of the quiz
-- Shows answer review after completing the quiz
-- Provides performance feedback based on the final percentage
-- Saves quiz scores locally using JSON
-- Stores player name, category, score, and date
-- Shows a top-five high-score leaderboard
+- Score and percentage calculation
+- Performance feedback after each quiz
+- Detailed answer review
+- Replay quizzes with different categories
+- Local JSON high-score leaderboard
+- Stores player name, category, difficulty, score, and date
+- Displays the top five high scores
 
-## Requirements
+## Technologies Used
+
+- Python
+- JSON
+- `random`
+- `datetime`
+- `pathlib`
+
+
 
 - Python 3.x
+
 
 ```bash
 
