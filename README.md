@@ -28,9 +28,9 @@ Users can choose a quiz category and difficulty level, answer randomly selected 
 
 - Python
 - JSON
-- `random`
-- `datetime`
-- `pathlib`
+- random
+- datetime
+- pathlib
 
 
 
